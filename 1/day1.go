@@ -11,7 +11,8 @@ import (
 )
 
 func main() {
-	doThing("testinput.txt", true, false)
+	doThing("input.txt", false, false)
+	doThing("input.txt", true, false)
 }
 
 func doThing(filename string, partTwo bool, debug bool) {
@@ -33,14 +34,8 @@ func doThing(filename string, partTwo bool, debug bool) {
 	for i, line := range lines {
 		// make a digits regex
 		digitsOnly := regexp.MustCompile(`\d`)
-		if debug {
-			fmt.Print(line, " : ")
-		}
 		if partTwo {
 			line = replaceStringNumbers(line)
-		}
-		if debug {
-			fmt.Print(line, " : ")
 		}
 		digits := digitsOnly.FindAllString(line, -1)
 		// Skip bugged lines
@@ -48,18 +43,11 @@ func doThing(filename string, partTwo bool, debug bool) {
 			fmt.Print("BUGGED", "\n") // This is here because the test input fails on the first version
 			continue
 		}
-		if debug {
-			fmt.Print(digits, " : ")
-		}
 		str := digits[0] + digits[len(digits)-1]
 		num, err := strconv.Atoi(str)
-		if debug {
-			fmt.Print(num, "\n")
-		}
 		if err == nil {
 			numbers[i] = num
 		}
-		// fmt.Print(ln[0], ln[len(ln)-1], "\n")
 	}
 
 	total := sumSlice(numbers)
@@ -76,7 +64,19 @@ func sumSlice(nums []int) int {
 
 func replaceStringNumbers(str string) string {
 
-	r := strings.NewReplacer("one", "1",
+	r := strings.NewReplacer(
+		// Handle the ones that overlap at the end of strings
+		"twoneeight", "218",
+		// And these
+		"oneight", "18",
+		"twone", "21",
+		"eightwo", "82",
+		"threeight", "38",
+		"nineight", "98",
+		"sevenine", "79",
+		"fiveight", "58",
+		// And then just singles
+		"one", "1",
 		"two", "2",
 		"three", "3",
 		"four", "4",
