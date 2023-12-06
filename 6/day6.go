@@ -68,11 +68,8 @@ func processRacePossibilities(data *Data) {
 }
 
 func getTotal(data *Data) (total int) {
+	total = 1
 	for _, race := range data.Races {
-		if total == 0 {
-			total = race.PossibleWins
-			continue
-		}
 		total *= race.PossibleWins
 	}
 	return
